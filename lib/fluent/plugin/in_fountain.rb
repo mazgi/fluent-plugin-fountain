@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module Fluent
 class FountainInput < Input
   Plugin.register_input('fountain', self)
