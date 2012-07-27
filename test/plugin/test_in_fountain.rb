@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'fluent/test'
+require 'fluent/plugin/in_fountain'
 class FountainInputTest < Test::Unit::TestCase
   def setup
     Fluent::Test.setup
