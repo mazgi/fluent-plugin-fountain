@@ -23,6 +23,18 @@ class FountainInputTest < Test::Unit::TestCase
     assert_equal ["#{TMP_DIR}/**/*"], d.instance.paths
   end
 
+  def test_create_file
+    d = create_driver
+
+    d.run do
+      sleep 1
+      FileUtils.mkdir_p("#{TMP_DIR}/0")
+      sleep 1
+      FileUtils.rm_rf("#{TMP_DIR}/0")
+      sleep 1
+    end
+  end
+
   def test_emit
   end
 end

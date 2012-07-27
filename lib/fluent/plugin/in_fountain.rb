@@ -19,17 +19,33 @@ class FountainInput < Input
     if @paths.empty?
       raise ConfigError, "fountain: 'path' parameter is required on fountain input"
     end
+
+    require 'rb-inotify'
+    @notifier = INotify::Notifier.new
+    @paths.each {|path|
+      while true
+        break unless path.index('*')
+          path = File::dirname(path)
+        end
+        next if @notifier.watchers.values.index {|w|
+          w.path == path
+        }
+        @notifier.watch(path, :recursive, :create, :delete, :attrib) {|event|
+          $log.trace("detect \"#{event.name}\".")
+      } if File::exist? path
+    }
   end
 
   def start
     super
+    Thread.new {
+      @notifier.run
+    }
   end
 
   def shutdown
-    super
-  end
-
-  def run
+    @notifier.stop
+    @notifier.close
     super
   end
 end
